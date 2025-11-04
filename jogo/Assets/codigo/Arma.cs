@@ -54,4 +54,10 @@ public class Arma : MonoBehaviour
         escala.y *= -1; // inverte no eixo Y pra não ficar de ponta cabeça
         transform.localScale = escala;
     }
+
+    void OnDrawGizmos()
+    {
+    Gizmos.color = Color.red;
+    Gizmos.DrawLine(transform.position, transform.position + transform.right * 1f);
+    }
 }

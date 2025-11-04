@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 493969afc7859194a9e1cd6f8ba2465e
+guid: 20a91cf8cde145342bd101807fcbcc81
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 792755782376135230
-    second: 580b585b2edbce24c47b2446_0
+      213: -9087023908748906362
+    second: cajado-removebg-preview_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,23 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 580b585b2edbce24c47b2446_0
+      name: cajado-removebg-preview_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2031
-        height: 1609
+        x: 120
+        y: 113
+        width: 266
+        height: 250
       alignment: 9
-      pivot: {x: 0.84534144, y: 0.3732528}
+      pivot: {x: 0.2994943, y: 0.30072808}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e3a9a221f2f600b00800000000000000
-      internalID: 792755782376135230
+      spriteID: 6803a8d66e764e180800000000000000
+      internalID: -9087023908748906362
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3b7af96bb940d1646bd14560d07bb612
+    spriteID: 51290df6841e2ea4f8e5b3c93eb809d8
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      580b585b2edbce24c47b2446_0: 792755782376135230
+      cajado-removebg-preview_0: -9087023908748906362
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
