@@ -1,106 +1,86 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Inimigo : Personagem
+public class Inimigo : MonoBehaviour
 {
-    [SerializeField] private int dano = 1;
-    
-    public float raioDeVisao = 1;
-    public CircleCollider2D _visaoCollider2D;
+    [Header("Atributos")]
+    public float velocidade = 2f;
+    public float raioDeteccao = 5f; // distância em que o inimigo detecta o jogador
+    public int vidaMaxima = 50;
+    public int vidaAtual;
+    public int dano = 10;
+    public int pontosAoMorrer = 10;
 
-    [SerializeField] private Transform posicaoDoPlayer;
-    
-    private SpriteRenderer spriteRenderer;
-    private Animator animator;
+    [Header("Referências")]
+    public Slider barraVida;
+    public Transform corpo;
 
-    private bool andando = false;
-    
-    public void setDano(int dano)
-    {
-        this.dano = dano;
-    }
-    public int getDano()
-    {
-        return this.dano;
-    }
-    
-    
-    
+    private Transform player;
+    private bool jogadorDetectado = false;
+
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
-        
-        if (posicaoDoPlayer == null)
-        {
-            posicaoDoPlayer =  GameObject.Find("Player").transform;
-           // posicaoDoPlayer =  GameObject.FindGameObjectsWithTag("Player")[0].transform;
-        }
-        
-        raioDeVisao = _visaoCollider2D.radius;
-
+        vidaAtual = vidaMaxima;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
     }
+
     void Update()
     {
-        andando = false;
+        if (player == null) return;
 
-        if (getVida() > 0)
+        // Verifica a distância até o jogador
+        float distancia = Vector2.Distance(transform.position, player.position);
+        jogadorDetectado = distancia <= raioDeteccao;
+
+        // Se o jogador estiver dentro da área de detecção, segue
+        if (jogadorDetectado)
         {
+            Vector2 direcao = (player.position - transform.position).normalized;
+            transform.position += (Vector3)direcao * velocidade * Time.deltaTime;
 
-            if (posicaoDoPlayer.position.x - transform.position.x > 0)
-            {
-                spriteRenderer.flipX = false;
-            }
-
-            if (posicaoDoPlayer.position.x - transform.position.x < 0)
-            {
-                spriteRenderer.flipX = true;
-            }
-
-
-            if (posicaoDoPlayer != null &&
-                Vector3.Distance(posicaoDoPlayer.position, transform.position) <= raioDeVisao)
-            {
-                Debug.Log("Posição do Pluer" + posicaoDoPlayer.position);
-
-                transform.position = Vector3.MoveTowards(transform.position,
-                    posicaoDoPlayer.transform.position,
-                    getVelocidade() * Time.deltaTime);
-
-                andando = true;
-            }
+            float angulo = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+            if (corpo != null)
+                corpo.rotation = Quaternion.Euler(0, 0, angulo - 90f);
         }
 
-        if (getVida() <= 0)
-        {
-            animator.SetTrigger("Morte");
-        }
-        
-        animator.SetBool("Andando",andando);
-
+        // Atualiza a barra de vida
+        if (barraVida != null)
+            barraVida.value = (float)vidaAtual / vidaMaxima;
     }
 
-    public void desativa()
+    void OnTriggerEnter2D(Collider2D outro)
     {
-        //desativa o objeto do Inimigo
-        //gameObject.SetActive(false);
-        Destroy(gameObject);
-        Debug.Log("Teste...");
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player") && getVida() > 0)
+        if (outro.CompareTag("Player"))
         {
-            // Causa dano ao Player
-            int novaVida = collision.gameObject.GetComponent<Personagem>().getVida() - getDano();
-            collision.gameObject.GetComponent<Personagem>().setVida(novaVida);
-
-            //collision.gameObject.GetComponent<Personagem>().recebeDano(getDano());
-            
-            //sera a vida do inimigo
-            setVida(0);
+            Player p = outro.GetComponent<Player>();
+            if (p != null)
+                p.LevarDano(dano);
         }
     }
 
+    public void LevarDano(int danoRecebido)
+    {
+        vidaAtual -= danoRecebido;
+
+        if (vidaAtual <= 0)
+        {
+            vidaAtual = 0;
+
+            if (player != null)
+            {
+                Player p = player.GetComponent<Player>();
+                if (p != null)
+                    p.AdicionarPontuacao(pontosAoMorrer);
+            }
+
+            Destroy(gameObject);
+        }
+    }
+
+    // Desenha o raio de detecção na Scene View (apenas visual)
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, raioDeteccao);
+    }
 }
-
