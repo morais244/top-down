@@ -13,7 +13,6 @@ public class Inimigo : MonoBehaviour
 
     [Header("Referências")]
     public Slider barraVida;
-    public Transform corpo;
 
     private Transform player;
     private bool jogadorDetectado = false;
@@ -37,10 +36,7 @@ public class Inimigo : MonoBehaviour
         {
             Vector2 direcao = (player.position - transform.position).normalized;
             transform.position += (Vector3)direcao * velocidade * Time.deltaTime;
-
-            float angulo = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
-            if (corpo != null)
-                corpo.rotation = Quaternion.Euler(0, 0, angulo - 90f);
+            
         }
 
         // Atualiza a barra de vida

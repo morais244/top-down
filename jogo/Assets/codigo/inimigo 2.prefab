@@ -589,17 +589,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 9156995243685575110}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77106af1f5334744d9fa72f50d65a32f, type: 3}
+  m_Script: {fileID: 11500000, guid: 66b4309199aba3e428ed37bc9b190e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidade: 3
-  raioDeteccao: 10
-  vidaMaxima: 30
-  vidaAtual: 30
-  dano: 5
+  velocidade: 2
+  raioDeteccao: 5
+  vidaMaxima: 50
+  vidaAtual: 60
+  dano: 10
   pontosAoMorrer: 10
   barraVida: {fileID: 1314418938724159132}
-  corpo: {fileID: 0}
 --- !u!50 &5271781576892098934
 Rigidbody2D:
   serializedVersion: 5
