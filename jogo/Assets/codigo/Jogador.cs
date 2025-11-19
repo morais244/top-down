@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
+public class Jogador : MonoBehaviour
 {
     public float velocidade = 5f;
     public int vidaMaxima = 100;
@@ -10,6 +11,8 @@ public class Player : MonoBehaviour
 
     public Slider barraVidaUI;
     public TMPro.TextMeshProUGUI textoPontuacao;
+
+    public Transform corpo;
 
     private Rigidbody2D rb;
     private Vector2 direcao;
@@ -26,6 +29,13 @@ public class Player : MonoBehaviour
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         direcao = new Vector2(moveX, moveY).normalized;
+
+        if (direcao.sqrMagnitude > 0.01f && corpo != null)
+        {
+            float angulo = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+            corpo.rotation = Quaternion.Euler(0f, 0f, angulo - 90f);
+        }
+
         AtualizarHUD();
     }
 
@@ -36,28 +46,33 @@ public class Player : MonoBehaviour
 
     public void LevarDano(int dano)
     {
+        if (vidaAtual <= 0) return;
+
         vidaAtual -= dano;
-        if (vidaAtual <= 0)
-        {
-            vidaAtual = 0;
-            AtualizarHUD();
-            Morrer();
-            return;
-        }
+        vidaAtual = Mathf.Clamp(vidaAtual, 0, vidaMaxima);
 
         AtualizarHUD();
+
+        if (vidaAtual == 0)
+            Morrer();
     }
 
     void Morrer()
     {
-        // Aqui você pode adicionar animação ou efeitos antes de destruir
-        Destroy(gameObject);
+        Destroy(gameObject, 0.5f);
+        Invoke(nameof(CarregarCenaMorte), 0.5f);
+    }
+
+    void CarregarCenaMorte()
+    {
+        SceneManager.LoadScene("Menu");
     }
 
     public void AdicionarPontuacao(int pontos)
     {
         pontuacao += pontos;
         AtualizarHUD();
+        Debug.Log($"Pontuação atual: {pontuacao}");
     }
 
     void AtualizarHUD()

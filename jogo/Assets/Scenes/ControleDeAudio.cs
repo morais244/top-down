@@ -13,10 +13,12 @@ public class ControleDeAudio : MonoBehaviour
 
     void Start()
     {
-        audioMixer.GetFloat("Master", out masterVolume);
-
+        // Começa sempre em 100% (0 dB)
+        masterVolume = 0f;
         slider.value = masterVolume;
-        AtualizarVolume();
+        audioMixer.SetFloat("Master", masterVolume);
+
+        AtualizarTexto();
     }
 
     void Update()
@@ -44,10 +46,9 @@ public class ControleDeAudio : MonoBehaviour
 
     void AtualizarTexto()
     {
-        // Converte o valor dB para porcentagem visual (0% a 100%)
         float porcentagem = Mathf.InverseLerp(-20f, 0f, masterVolume) * 100f;
         porcentagem = Mathf.Clamp(porcentagem, 0, 100);
 
         texto.text = $"Música: {porcentagem:F0}%";
     }
-}
+} 
